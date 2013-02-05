@@ -12,7 +12,7 @@ public class Servidor {
         try {
   // 1.CREACION DEL SOCKET-----------------------------------------
          //variables para gestionar el numero de conexiones el servidor   
-            int i=0,maxConnections=10;   
+            int i=0,maxConnections=0;   
          //creacion del socket para que escuche en el puerto TCP/6000   
             final ServerSocket SocketS= new ServerSocket(6000);
   
@@ -66,7 +66,7 @@ public class Servidor {
 
  // 6.WHILE COMMANDO <> QUIT----------------------------------------
                   // mientras el comando sea distinto de QUIT                
-                          while (!comando.equalsIgnoreCase("QUIT")) 
+                          while (!comando.equals("QUIT")) 
                           {  
                      //inicializar login a false. si el login es ok,mas adelante se activara       
                               loginok=false;
@@ -91,13 +91,13 @@ public class Servidor {
                                   {
                          //meter en parametro el siguiente token
                                       parametro=scanner.next();
-                         //si el comando es USER             
+                         //si el comando es USER  
                                       if (comando.equals("USER")) 
                                       {
                              //meter en usulogin lo que se ha pasado como parametro
                                           usulogin=parametro;
-                             //enviar mensaje de ok
-                                          dos.writeUTF("Usuario OK\n\r");
+                             //enviar mensaje de Usuario Recibido
+                                          dos.writeUTF("Usuario Recibido\n\r");
 
  //8.SI COMANDO==PASS --> passlogin= <parametro> -----------------------
                              //esperar a recibir otro texto del cliente             
@@ -142,8 +142,26 @@ public class Servidor {
                                         //si el login es valido
                                                   if (loginok) 
                                                   {
-                                            //enviar por el socket login ok
-                                                      dos.writeUTF("Login OK\n\r");
+                                            //enviar por el socket login Correcto
+                                                      dos.writeUTF("Login Correcto\n\r");
+                                                      //recibir texto del cliente por el socket
+                                                        entrada=isr.readLine();
+                                                      //si la entrada es LIST  
+                                                        if (entrada.equals("LIST")) {
+                                                            //abrir el fichero de acceso donde tenemos los usuarios y contraseñas
+                                                            fEntrada = new BufferedReader(new FileReader("acceso"));
+                                                            while ((cadena = fEntrada.readLine()) != null) {
+                                                                //sacar los usuarios y password del fichero acceso y mostrarlos
+                                                                Scanner scanner3 = new Scanner(cadena);
+                                                                scanner3.useDelimiter(";");
+                                                                dos.writeUTF("USER: " + scanner3.next() + " Pass: " + scanner3.next()+"\n\r");
+                                                            }
+                                                            //cerrar el fichero acceso
+                                                            fEntrada.close();
+                                                        }else
+                                                        {
+                                                            dos.writeUTF("Comando no encontrado\n\r");
+                                                        }
                                                   }
                                                   else
                                                   {
@@ -152,18 +170,23 @@ public class Servidor {
                                                   }
                                               }
                                   //si el comando recibido es distinto de USER enviar mensaje de error            
-                                              else
+                                            }  else
                                               {
-                                                  dos.writeUTF("Opcion Incorrecta.Vuelva a repetir el login con el comando USER\n ");
+                                                  dos.writeUTF("Opcion Incorrecta.Vuelva a repetir el login con el comando USER\n");
                                               }
                                           }
                              //si el comando recibido es distinto de USER enviar mensaje de error             
                                           else
                                           {
-                                              dos.writeUTF(" Opcion Incorrecta: Comando invalido. Teclear USER\n");
+                                              dos.writeUTF("Opcion Incorrecta: Comando invalido. Teclear USER\n");
                                           }
                                       }
-                                  }
+                                //si el comando recibido es distinto de USER enviar mensaje de error             
+                                    else
+                                    {
+                                        dos.writeUTF("Opcion Incorrecta: Comando invalido. Teclear USER\n");
+                                    }
+                                  
                               }
                           }
    // 11. CERRAR SOCKET CLIENTE---------------------------------------------
