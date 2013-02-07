@@ -176,15 +176,13 @@ public class Servidor {
                                           dos.writeUTF("Opcion Incorrecta.Vuelva a repetir el login con el comando USER\n\r");
                                       }
                                   }
-                     //si el comando recibido es distinto de USER enviar mensaje de error excepto si es QUIT             
+                     //si el comando recibido es distinto de USER enviar mensaje de error           
                                   else
                                   {
-                                      if (!comando.equals("QUIT")) {
                                           dos.writeUTF("Opcion Incorrecta: Comando invalido. Teclear USER\n\r");
-                                      }
                                   }
-                              }
-                        //si el comando recibido es distinto de USER enviar mensaje de error excepto si es QUIT             
+                        //si el comando recibido es distinto de USER enviar mensaje de error excepto si es QUIT    
+                            }  
                             else
                             {
                                 if (!comando.equals("QUIT")) {
