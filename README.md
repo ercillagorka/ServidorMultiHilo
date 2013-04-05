@@ -6,6 +6,7 @@ Servidor en java MultiHilo con los accesos en un fichero.
 
 
 Copyright (C) <2013>  <gorka ercilla>
+=================
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
